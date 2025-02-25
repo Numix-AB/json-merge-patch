@@ -58,9 +58,6 @@ export default function merge<P1, P2>(
     return clone(patch2) as MergedPatches<P1, P2>;
   }
 
-  patch1 satisfies Record<keyof P1, any>;
-  patch2 satisfies Record<keyof P2, any>;
-
   const newPatch = { ...patch1 } as MergedDictionary<
     Extract<P1, object>,
     Extract<P2, object>
