@@ -1,7 +1,7 @@
 import { describe, it } from "mocha";
 import { assert } from "chai";
 
-import generate from "../../lib/generate.js";
+import generate from "../src/generate.js";
 
 describe("generate", function () {
   it("should generate a patch replacing an attribute", function () {

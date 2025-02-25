@@ -1,6 +1,5 @@
 import equal from "fast-deep-equal";
 import { serialize } from "./utils.js";
-import { MergePatch } from "./apply.js";
 
 function arrayEquals(before: any, after: any) {
   if (before.length !== after.length) {
@@ -14,11 +13,6 @@ function arrayEquals(before: any, after: any) {
   return true;
 }
 
-export default function generate<T>(before: T, after: T): MergePatch<T>;
-export default function generate<T, U>(
-  before: T,
-  after: U
-): MergePatch<T | U> | undefined;
 export default function generate<T>(before: T, after: null): null;
 export default function generate(before: any, after: any): any;
 export default function generate(before: any, after: any) {

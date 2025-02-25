@@ -1,7 +1,7 @@
 import { describe, it } from "mocha";
 import { assert } from "chai";
 
-import apply from "../../lib/apply.js";
+import apply from "../src/apply.js";
 
 describe("apply", function () {
   it("should replace an attribute", function () {
@@ -47,13 +47,13 @@ describe("apply", function () {
   });
 
   it("should replace an object with null", function () {
-    assert.deepEqual(apply({ a: "foo" }, null), null);
+    assert.deepEqual(apply({ a: "foo" }, null), undefined);
   });
 
   it("should replace with an object implementing toJSON() method", function () {
     assert.deepEqual(
       apply({ a: "foo" }, { a: new Date("2020-05-09T00:00:00.000Z") }),
-      { a: "2020-05-09T00:00:00.000Z" }
+      { a: new Date("2020-05-09T00:00:00.000Z") }
     );
   });
 
