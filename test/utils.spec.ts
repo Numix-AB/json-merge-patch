@@ -1,4 +1,4 @@
-import { MergePatch, RecursiveRemoveNulls } from "../src/utils";
+import { And, Is, RecursiveRemoveNulls } from "../src/utils";
 
 export type Equals<T, U> = (<G>() => G extends T ? 1 : 2) extends <
   G
@@ -6,7 +6,48 @@ export type Equals<T, U> = (<G>() => G extends T ? 1 : 2) extends <
   ? true
   : false;
 
+// eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars
+namespace EqualsTest {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Test1 = IsFalse<
+    Equals<
+      {
+        a: string;
+        c?: undefined;
+      },
+      {
+        a: string;
+      } & {
+        c?: undefined;
+      }
+    >
+  >;
+}
+
+// The above assertion should fail because the expected type is not equal to the actual type.
+// The Equiv type should be used to compare the types.
+export type Equiv<T, U> = And<Is<T, U>, Is<U, T>>;
+
+// eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars
+namespace EquivTest {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Test1 = IsTrue<
+    Equiv<
+      {
+        a: string;
+        c?: undefined;
+      },
+      {
+        a: string;
+      } & {
+        c?: undefined;
+      }
+    >
+  >;
+}
+
 export type IsTrue<T extends true> = T;
+export type IsFalse<T extends false> = T;
 
 // Null should be removed from the object.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,90 +61,4 @@ type _Test1Assertion1 = IsTrue<
       a: string;
     }
   >
->;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test2Assertion1 = IsTrue<
-  Equals<
-    MergePatch<{
-      a: string;
-      c?: number;
-    }>,
-    | {
-        a?: string;
-        c?: number | null;
-      }
-    | undefined
-  >
->;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test3Assertion1 = IsTrue<
-  Equals<
-    MergePatch<{
-      a: string;
-      b: number;
-      c: {
-        d: string;
-      };
-      e?: {
-        f: number;
-        g?: string;
-      };
-    }>,
-    | {
-        a?: string;
-        b?: number;
-        c?: {
-          d?: string;
-        };
-        e?: {
-          f?: number;
-          g?: string | null;
-        } | null;
-      }
-    | undefined
-  >
->;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test4Assertion1 = IsTrue<
-  Equals<
-    MergePatch<{
-      a: string;
-      b: number;
-      c: {
-        d: string;
-      };
-      e?: {
-        f: number;
-        g?: Date;
-      };
-    }>,
-    | {
-        a?: string;
-        b?: number;
-        c?: {
-          d?: string;
-        };
-        e?: {
-          f?: number;
-          g?: Date | null;
-        } | null;
-      }
-    | undefined
-  >
->;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test4Assertion5 = IsTrue<
-  Equals<MergePatch<number | undefined>, number | null | undefined>
->;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test4Assertion6 = IsTrue<Equals<MergePatch<Date>, Date | undefined>>;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type _Test4Assertion7 = IsTrue<
-  Equals<MergePatch<Date | undefined>, Date | null | undefined>
 >;

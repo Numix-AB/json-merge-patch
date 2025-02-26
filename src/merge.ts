@@ -43,6 +43,11 @@ export type MergedPatches<P1, P2> =
 export default function merge<P1, P2>(
   patch1: P1,
   patch2: P2
+): MergedPatches<P1, P2>;
+export default function merge<T>(patch1: T, patch2: T): T;
+export default function merge<P1, P2>(
+  patch1: P1,
+  patch2: P2
 ): MergedPatches<P1, P2> {
   if (patch2 === undefined) {
     return clone(patch1) as MergedPatches<P1, P2>;

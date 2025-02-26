@@ -1,6 +1,7 @@
 import {
   Is,
   isScalar,
+  MergePatch,
   OptionalIfUndefined,
   recursiveRemoveNulls,
   RecursiveRemoveNulls,
@@ -58,6 +59,9 @@ export type PatchedTarget<T, P> =
   // If P is undefined, the result should be T.
   | (Extract<P, undefined> extends never ? never : T);
 
+// This signature exists to simplify the type definition of the apply function when used with a MergePatch. The return type is the same as the target type. This is ensured by type tests in the test suite.
+export default function apply<T>(target: T, patch: MergePatch<T>): T;
+export default function apply<T, P>(target: T, patch: P): PatchedTarget<T, P>;
 export default function apply<T, P>(target: T, patch: P): PatchedTarget<T, P> {
   if (patch === undefined) {
     return target as Extract<P, undefined> extends never ? never : T;

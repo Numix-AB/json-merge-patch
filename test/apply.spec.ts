@@ -1,7 +1,77 @@
 import { describe, it } from "mocha";
 import { assert } from "chai";
 
-import apply from "../src/apply.js";
+import apply, { PatchedTarget } from "../src/apply.js";
+import { Equals, Equiv, IsTrue } from "./utils.spec.js";
+import { MergePatch } from "../src/utils.js";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type _Test1Assertion1 = IsTrue<
+  Equiv<
+    PatchedTarget<
+      { a: string; c: string },
+      {
+        a: string;
+        c: null;
+      }
+    >,
+    {
+      a: string;
+    } & {
+      c?: undefined;
+    }
+  >
+>;
+
+// eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars
+namespace MergePatchPatchedTargetEquivTest {
+  interface Test1 {
+    a: string;
+    b: number;
+    c: {
+      d: string;
+    };
+    e?: {
+      f: number;
+      g?: Date;
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Test1Assertion = IsTrue<
+    Equals<PatchedTarget<Test1, MergePatch<Test1>>, Test1>
+  >;
+
+  interface Test2 {
+    a: string;
+    b: number;
+    c: {
+      d: string;
+      e: {
+        f: number;
+        g?: Date;
+      };
+    };
+    h: {
+      i: {
+        j: string;
+        k: number;
+      };
+    };
+    l: string[];
+    m: {
+      n?: {
+        o: Date;
+      }[];
+      p?: string[];
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type _Test2Assertion = IsTrue<
+    Equals<PatchedTarget<Test2, MergePatch<Test2>>, Test2>
+  >;
+}
 
 describe("apply", function () {
   it("should replace an attribute", function () {
