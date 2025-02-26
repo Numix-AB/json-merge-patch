@@ -11,9 +11,10 @@ import type {
   MergedProperty,
   MergedPatches,
 } from "./merge.js";
-import type { MergePatch } from "./utils.js";
+import { isScalar } from "./utils.js";
+import type { DictionaryMergePatch, MergePatch, Scalar } from "./utils.js";
 
-export { apply, generate, merge };
+export { apply, generate, merge, isScalar };
 export type {
   PatchedDictionary,
   PatchedProperty,
@@ -22,4 +23,6 @@ export type {
   MergedProperty,
   MergedPatches,
   MergePatch,
+  DictionaryMergePatch,
+  Scalar,
 };

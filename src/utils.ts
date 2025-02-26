@@ -2,18 +2,24 @@ export function serialize(value: any): any {
   return value && typeof value.toJSON === "function" ? value.toJSON() : value;
 }
 
+export type DictionaryMergePatch<
+  T extends Partial<Record<string | number, unknown>>
+> = {
+  [P in keyof T]?: MergePatch<T[P]>;
+};
+
 // This type can be used to ensure that the resulting object of an applied patch is the same type as the target object.
 export type MergePatch<T> =
   // A merge patch can always be undefined, i.e. no operation. This is especially useful for the recursive definition of the type.
   | undefined
+  | T
   // If the property can be undefined, it can be set to null.
   | (Extract<T, undefined> extends never ? never : null)
-  | (Is<Exclude<T, undefined>, Scalar> extends true ? T : never)
-  | (IsSimpleObject<Exclude<T, undefined>> extends true
-      ? {
-          // If the property is an object, it can be set to a patch of itself. Otherwise, it can be set to a value.
-          [P in keyof T]?: MergePatch<T[P]>;
-        }
+  | (Exclude<T, Scalar | null | undefined> extends Partial<
+      Record<string | number, unknown>
+    >
+      ? // If the property is an object, it can be set to a patch of itself. Otherwise, it can be set to a value.
+        DictionaryMergePatch<Exclude<T, Scalar | null | undefined>>
       : never);
 
 export type IsSimpleObject<T> = Not<Is<T, Scalar | null | undefined>>;
